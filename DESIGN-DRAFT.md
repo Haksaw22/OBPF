@@ -124,6 +124,46 @@ scope for these gates and get their own design if Stage 1 passes.
 Z1 → Z2 → C1 → C3 → C2 → verdict doc (per-gate outcomes, PASS/PARTIAL/KILL stated
 plainly) → only then the article question reopens.
 
+## R1 — the one repair round (authorized by Kulbir 2026-07-22: "Hit option 2")
+
+*Pre-committed: ONE round. Numbers below fixed before any R1 run. If the repaired
+operator also fails gate zero, the negative is final and the project banks.*
+
+**R1a — repaired merge operator: damped update-sum with per-evaluation line search.**
+$\theta(\alpha) = \theta_0 + \alpha \sum_i (\theta_i - \theta_0)$, $\alpha$ chosen per
+evaluation from the grid {1.0, 0.7, 0.5, 0.35, 0.25, 0.18, 0.12, 0.08, 0.05} to
+minimise the training-batch loss (9 forward passes — negligible cost). Every
+partition gets its own best damping, so the repair is fair across partitions.
+Rationale: removes the overshoot-magnitude artifact diagnosed in VERDICT-STAGE1;
+what remains is directional interference between branch updates — closer to pure
+coupling. Note: mass-scaling of branch gradients (soft rows scale gradients by
+component mass) already prevents the scaled-copy family from reaching joint-quality
+progress; its G is re-measured in R1b anyway, and λ_d is re-frozen there if needed
+(logged before any gate rerun).
+
+**R1b — the (K × lr) window sweep (calibration, not a claim).** Grid K ∈ {50, 100,
+300} × lr ∈ {0.005, 0.02, 0.05}, 6 seeds: G_damped(true), G_damped(random ×5),
+G_damped(uniform). Choose the cell with the best separation that meets the Z1
+criterion (median random > true + 3·sd_seed(true)). **If no cell separates, the
+repair fails at calibration: no regime where coupling signal > artifact > noise
+under the damped operator — report and stop.**
+
+**R1c — landscape pre-check (cheap, before the ES rerun).** The optimizer-free
+neighbour diagnostic under the damped operator at the chosen cell, 12 seeds. Proceed
+to R1d only if the truth is a local optimum on **≥ 10/12** seeds; otherwise the
+artifact persists — kill confirmed without burning the ES hours.
+
+**R1d — Z2 rerun** under the damped operator at the chosen cell. Same pre-registered
+gate numbers as Z2 (mean AMI ≥ 0.95, no seed < 0.8; KILL if mean < 0.90). PASS →
+the original chain resumes (C1 → C3 → C2, all under the damped operator). KILL →
+final; bank the ironclad negative.
+
+**D2 (declared now, before R1 runs).** The outer ES gains best-seen elitism: μ is
+evaluated each generation and the returned solution is the best-seen μ by fitness
+(+1 evaluation per generation). Reason: the Z2 diagnosis showed 4/12 seeds walked
+away from a *superior* optimum by ES noise alone; the gate's intent is objective
+preference, and an optimizer that cannot hold a superior optimum confounds it.
+
 ## DEVIATIONS
 
 - **D1 (2026-07-22, before any gate ran — smoke-test stage).** Inner optimiser changed

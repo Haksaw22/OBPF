@@ -51,10 +51,10 @@ def warm_init(env, seed: int):
     return model, X, Y
 
 
-def _train_copy(model0, env, X, Y, weights: torch.Tensor, K: int):
+def _train_copy(model0, env, X, Y, weights: torch.Tensor, K: int, lr: float | None = None):
     """Fresh copy of model0 trained K full-batch SGD steps on sum_t weights_t * l_t."""
     m = copy.deepcopy(model0)
-    opt = torch.optim.SGD(m.parameters(), lr=INNER_LR)
+    opt = torch.optim.SGD(m.parameters(), lr=INNER_LR if lr is None else lr)
     for _ in range(K):
         opt.zero_grad()
         (env.task_losses(m, X, Y) * weights).sum().backward()
@@ -68,21 +68,41 @@ def total_loss(model, env, X, Y) -> float:
 
 
 # ------------------------------------------------------------------ the objective
-def gk_eval(w: torch.Tensor, env, model0, X, Y, K: int, merge: str = "update_sum") -> dict:
-    """w: [T, P] rows on the simplex. Returns G_K and components."""
+ALPHA_GRID = [1.0, 0.7, 0.5, 0.35, 0.25, 0.18, 0.12, 0.08, 0.05]  # R1a line search
+
+
+def gk_eval(w: torch.Tensor, env, model0, X, Y, K: int, merge: str = "update_sum",
+            lr: float | None = None) -> dict:
+    """w: [T, P] rows on the simplex. Returns G_K and components.
+
+    merge: 'update_sum' (Z-round primary), 'mass_avg' (Z-round secondary),
+    'damped_sum' (R1a: update-sum with per-eval line search over alpha)."""
     T, P = w.shape
-    joint = _train_copy(model0, env, X, Y, torch.ones(T), K)
+    joint = _train_copy(model0, env, X, Y, torch.ones(T), K, lr=lr)
     v0 = parameters_to_vector(model0.parameters()).detach()
-    if merge == "update_sum":
-        v = v0.clone()
+    alpha_star = None
+    if merge in ("update_sum", "damped_sum"):
+        dv = torch.zeros_like(v0)
         for i in range(P):
-            bi = _train_copy(model0, env, X, Y, w[:, i], K)
-            v += parameters_to_vector(bi.parameters()).detach() - v0
+            bi = _train_copy(model0, env, X, Y, w[:, i], K, lr=lr)
+            dv += parameters_to_vector(bi.parameters()).detach() - v0
+        if merge == "update_sum":
+            v = v0 + dv
+        else:
+            probe = copy.deepcopy(model0)
+            best_a, best_l = None, None
+            for a in ALPHA_GRID:
+                vector_to_parameters(v0 + a * dv, probe.parameters())
+                la = total_loss(probe, env, X, Y)
+                if best_l is None or la < best_l:
+                    best_a, best_l = a, la
+            alpha_star = best_a
+            v = v0 + best_a * dv
     elif merge == "mass_avg":
         v = torch.zeros_like(v0)
         mass = w.sum(dim=0)
         for i in range(P):
-            bi = _train_copy(model0, env, X, Y, w[:, i], K)
+            bi = _train_copy(model0, env, X, Y, w[:, i], K, lr=lr)
             v += mass[i] * parameters_to_vector(bi.parameters()).detach()
         v /= mass.sum()
     else:
@@ -90,8 +110,11 @@ def gk_eval(w: torch.Tensor, env, model0, X, Y, K: int, merge: str = "update_sum
     merged = copy.deepcopy(model0)
     vector_to_parameters(v, merged.parameters())
     L_m, L_j = total_loss(merged, env, X, Y), total_loss(joint, env, X, Y)
-    return {"G_K": L_m - L_j, "L_merged": L_m, "L_joint": L_j,
-            "L_theta0": total_loss(model0, env, X, Y)}
+    out = {"G_K": L_m - L_j, "L_merged": L_m, "L_joint": L_j,
+           "L_theta0": total_loss(model0, env, X, Y)}
+    if alpha_star is not None:
+        out["alpha"] = alpha_star
+    return out
 
 
 def overlap(w: torch.Tensor) -> float:
@@ -99,9 +122,10 @@ def overlap(w: torch.Tensor) -> float:
     return float((1.0 - (w ** 2).sum(dim=1)).mean())
 
 
-def fitness(logits: torch.Tensor, env, model0, X, Y, K: int, lam_d: float) -> tuple[float, dict]:
+def fitness(logits: torch.Tensor, env, model0, X, Y, K: int, lam_d: float,
+            merge: str = "update_sum", lr: float | None = None) -> tuple[float, dict]:
     w = torch.softmax(logits, dim=1)
-    r = gk_eval(w, env, model0, X, Y, K)
+    r = gk_eval(w, env, model0, X, Y, K, merge=merge, lr=lr)
     ov = overlap(w)
     return -(r["G_K"] + lam_d * ov), {**r, "overlap": ov}
 
@@ -109,20 +133,29 @@ def fitness(logits: torch.Tensor, env, model0, X, Y, K: int, lam_d: float) -> tu
 # ------------------------------------------------------------------ ES (primary outer optimiser)
 def es_optimize(seed: int, K: int, lam_d: float, init_logits: torch.Tensor,
                 pairs: int = 16, gens: int = 30, sigma: float = 0.6, lr_es: float = 0.3,
-                log_every: int = 5, quiet: bool = False):
-    """Antithetic NES with rank-shaped utilities. Deterministic given (seed, init)."""
+                log_every: int = 5, quiet: bool = False,
+                merge: str = "update_sum", lr: float | None = None, elitism: bool = False):
+    """Antithetic NES with rank-shaped utilities. Deterministic given (seed, init).
+
+    elitism=True (D2): mu is evaluated each generation and the returned solution is
+    the best-seen mu by fitness."""
     env = get_env(seed)
     model0, X, Y = warm_init(env, seed)
     mu = init_logits.clone()
     gen_noise = torch.Generator().manual_seed(100_000 + seed)
     history = []
+    best_mu, best_mu_fit = None, None
     for g in range(gens):
+        if elitism:
+            f_cur, _ = fitness(mu, env, model0, X, Y, K, lam_d, merge=merge, lr=lr)
+            if best_mu_fit is None or f_cur > best_mu_fit:
+                best_mu, best_mu_fit = mu.clone(), f_cur
         eps = [torch.randn(mu.shape, generator=gen_noise) for _ in range(pairs)]
         cand, fits = [], []
         for e in eps:
             cand += [mu + sigma * e, mu - sigma * e]
         for c in cand:
-            f, _ = fitness(c, env, model0, X, Y, K, lam_d)
+            f, _ = fitness(c, env, model0, X, Y, K, lam_d, merge=merge, lr=lr)
             fits.append(f)
         order = sorted(range(len(cand)), key=lambda i: fits[i])
         util = torch.zeros(len(cand))
@@ -137,7 +170,10 @@ def es_optimize(seed: int, K: int, lam_d: float, init_logits: torch.Tensor,
         history.append(best)
         if not quiet and g % log_every == 0:
             print(f"  seed {seed} gen {g:3d} best_fitness {best:+.5f}", flush=True)
-    f_mu, detail = fitness(mu, env, model0, X, Y, K, lam_d)
+    f_mu, detail = fitness(mu, env, model0, X, Y, K, lam_d, merge=merge, lr=lr)
+    if elitism and best_mu_fit is not None and best_mu_fit > f_mu:
+        mu, f_mu = best_mu, best_mu_fit
+        _, detail = fitness(mu, env, model0, X, Y, K, lam_d, merge=merge, lr=lr)
     w = torch.softmax(mu, dim=1)
     pred = w.argmax(dim=1)
     return {"seed": seed, "ami": float(ami_score(pred, env.group_labels())),
