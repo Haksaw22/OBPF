@@ -1,0 +1,5 @@
+{
+  "K": 100,
+  "lam_d": 0.5,
+  "note": "P1 completion, 2026-07-22, set AFTER Z1 scale logging and BEFORE any Z2/C1 run. K=100: the only K in {100,300,1000} passing the pre-registered separation criterion (random median 2.644 > true 1.006 + 3*0.396). lam_d=0.5: Z1 showed the operational G_K alone rejects the scaled-copy family by ~two orders of magnitude (G(uniform) ~191 vs G(true) ~1.0 at K=100) because update-sum punishes duplicated mass; lam_d therefore does not need to carry the degeneracy exclusion. It is kept small-but-nonzero (max penalty 0.375 vs G-separation ~1.6) to preserve the pre-registered functional form and serve as the coupling-curve knob in C3."
+}

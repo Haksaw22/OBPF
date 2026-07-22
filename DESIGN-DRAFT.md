@@ -126,4 +126,29 @@ plainly) → only then the article question reopens.
 
 ## DEVIATIONS
 
-*(empty at pre-registration; dated entries only)*
+- **D1 (2026-07-22, before any gate ran — smoke-test stage).** Inner optimiser changed
+  **Adam → SGD (lr 0.02)**. Reason: Adam's per-parameter normalisation moves
+  zero-gradient parameters at essentially full step size, so every branch performs a
+  full-scale random walk on all parameters outside its component's support; the
+  update-sum merge then compounds P such walks, and G_K(true)=131 ≫ G_K(random)=13.8
+  in the smoke test — the merge is destroyed for *any* partition, which invalidates
+  the objective, not the hypothesis. Under SGD (gradient-proportional steps, which
+  both merge operators implicitly assume) the expected ordering G(true) < G(random)
+  holds at every lr/K probed. Warmup to θ0 (shared, pre-branch) keeps the
+  predecessor's Adam protocol. Gate numbers unchanged.
+- **P1 (2026-07-22, params note — set before Z2/C1, after Z1 scale logging as the
+  design specified).** λ_d to be fixed from Z1's measured scales, with the explicit
+  check that the scaled-copy family (uniform rows) is rejected: the smoke test showed
+  that under SGD + update-sum, uniform weights approximately reproduce distributed
+  joint training (G ≈ small), so the λ_d × overlap penalty must exceed the
+  G-advantage uniform holds over hard partitions. Z1 measures G(uniform) explicitly
+  for this purpose.
+- **P1 completion (2026-07-22, after Z1, before Z2/C1).** Z1 result: **K = 100**
+  (only K passing separation: random median 2.644 > true 1.006 + 3×0.396; at K=300 and
+  K=1000 the seed-sd of G(true) grows faster than the separation). λ_d = 0.5. The
+  smoke-test worry in P1 inverted at gate scale: G(uniform) ≈ 191 ≫ G(random) ≈ 2.6 ≫
+  G(true) ≈ 1.0 — at K=100 the branches near-converge, so update-sum multiplies a
+  near-full displacement by P and duplicated mass overshoots catastrophically. The
+  operational objective alone rejects the scaled-copy family; λ_d is kept
+  small-but-nonzero (max penalty 0.375) for the pre-registered functional form and as
+  C3's knob. Params frozen in results/params.json before any Z2/C1 evaluation.
