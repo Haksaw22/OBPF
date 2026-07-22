@@ -1,0 +1,215 @@
+{
+  "config": {
+    "K": 100,
+    "lam_d": 0.5
+  },
+  "n_objective_prefers_wrong": 8,
+  "n_es_drift": 4,
+  "per_seed": [
+    {
+      "seed": 0,
+      "fit_true": -0.9674934148788452,
+      "G_true": 0.9674934148788452,
+      "n_better_neighbours": 4,
+      "best_neighbour": {
+        "task": 2,
+        "to": 3,
+        "fitness": -0.8006060123443604,
+        "G": 0.8006060123443604,
+        "ami": 0.7955459025180274
+      },
+      "truth_is_local_opt": false,
+      "z2_final_fitness": -1.2911991477012634,
+      "z2_ami": 0.7955459025180274,
+      "classification": "OBJECTIVE_PREFERS_WRONG (local)"
+    },
+    {
+      "seed": 1,
+      "fit_true": -1.4569275379180908,
+      "G_true": 1.4569275379180908,
+      "n_better_neighbours": 0,
+      "best_neighbour": {
+        "task": 9,
+        "to": 1,
+        "fitness": -1.479761004447937,
+        "G": 1.479761004447937,
+        "ami": 0.7955459025180273
+      },
+      "truth_is_local_opt": true,
+      "z2_final_fitness": -2.9684685319662094,
+      "z2_ami": 0.5890403411272609,
+      "classification": "ES_DRIFT"
+    },
+    {
+      "seed": 2,
+      "fit_true": -0.5530529618263245,
+      "G_true": 0.5530529618263245,
+      "n_better_neighbours": 0,
+      "best_neighbour": {
+        "task": 7,
+        "to": 3,
+        "fitness": -0.5802987813949585,
+        "G": 0.5802987813949585,
+        "ami": 0.7955459025180274
+      },
+      "truth_is_local_opt": true,
+      "z2_final_fitness": -0.9697872437536716,
+      "z2_ami": 0.5890403411272607,
+      "classification": "ES_DRIFT"
+    },
+    {
+      "seed": 3,
+      "fit_true": -0.572075605392456,
+      "G_true": 0.572075605392456,
+      "n_better_neighbours": 10,
+      "best_neighbour": {
+        "task": 3,
+        "to": 2,
+        "fitness": -0.5332038402557373,
+        "G": 0.5332038402557373,
+        "ami": 0.7955459025180274
+      },
+      "truth_is_local_opt": false,
+      "z2_final_fitness": -0.3977551143616438,
+      "z2_ami": 0.3289732561644212,
+      "classification": "OBJECTIVE_PREFERS_WRONG (local)"
+    },
+    {
+      "seed": 4,
+      "fit_true": -1.443348467350006,
+      "G_true": 1.443348467350006,
+      "n_better_neighbours": 2,
+      "best_neighbour": {
+        "task": 5,
+        "to": 2,
+        "fitness": -1.0334636569023132,
+        "G": 1.0334636569023132,
+        "ami": 0.7955459025180274
+      },
+      "truth_is_local_opt": false,
+      "z2_final_fitness": -1.6370434490963817,
+      "z2_ami": 0.7955459025180276,
+      "classification": "OBJECTIVE_PREFERS_WRONG (local)"
+    },
+    {
+      "seed": 5,
+      "fit_true": -1.151631474494934,
+      "G_true": 1.151631474494934,
+      "n_better_neighbours": 10,
+      "best_neighbour": {
+        "task": 6,
+        "to": 0,
+        "fitness": -0.6790931224822998,
+        "G": 0.6790931224822998,
+        "ami": 0.7955459025180276
+      },
+      "truth_is_local_opt": false,
+      "z2_final_fitness": -1.0756614331621677,
+      "z2_ami": 0.4200472105718952,
+      "classification": "OBJECTIVE_PREFERS_WRONG (local)"
+    },
+    {
+      "seed": 6,
+      "fit_true": -1.1387311518192291,
+      "G_true": 1.1387311518192291,
+      "n_better_neighbours": 0,
+      "best_neighbour": {
+        "task": 5,
+        "to": 2,
+        "fitness": -1.161657601594925,
+        "G": 1.161657601594925,
+        "ami": 0.7955459025180274
+      },
+      "truth_is_local_opt": true,
+      "z2_final_fitness": -1.4637740305624902,
+      "z2_ami": 0.7955459025180276,
+      "classification": "ES_DRIFT"
+    },
+    {
+      "seed": 7,
+      "fit_true": -0.839710146188736,
+      "G_true": 0.839710146188736,
+      "n_better_neighbours": 9,
+      "best_neighbour": {
+        "task": 8,
+        "to": 0,
+        "fitness": -0.6477407515048981,
+        "G": 0.6477407515048981,
+        "ami": 0.7955459025180276
+      },
+      "truth_is_local_opt": false,
+      "z2_final_fitness": -1.69893136061728,
+      "z2_ami": 0.6077965565449613,
+      "classification": "OBJECTIVE_PREFERS_WRONG (local)"
+    },
+    {
+      "seed": 8,
+      "fit_true": -0.6679500341415405,
+      "G_true": 0.6679500341415405,
+      "n_better_neighbours": 3,
+      "best_neighbour": {
+        "task": 4,
+        "to": 3,
+        "fitness": -0.6206250786781311,
+        "G": 0.6206250786781311,
+        "ami": 0.7955459025180274
+      },
+      "truth_is_local_opt": false,
+      "z2_final_fitness": -1.026244973181747,
+      "z2_ami": 0.23229786459882934,
+      "classification": "OBJECTIVE_PREFERS_WRONG (local)"
+    },
+    {
+      "seed": 9,
+      "fit_true": -2.783958464860916,
+      "G_true": 2.783958464860916,
+      "n_better_neighbours": 7,
+      "best_neighbour": {
+        "task": 9,
+        "to": 2,
+        "fitness": -2.5645220577716827,
+        "G": 2.5645220577716827,
+        "ami": 0.7955459025180273
+      },
+      "truth_is_local_opt": false,
+      "z2_final_fitness": -7.560008868575096,
+      "z2_ami": 0.38307102499752815,
+      "classification": "OBJECTIVE_PREFERS_WRONG (local)"
+    },
+    {
+      "seed": 10,
+      "fit_true": -2.1576400697231293,
+      "G_true": 2.1576400697231293,
+      "n_better_neighbours": 0,
+      "best_neighbour": {
+        "task": 0,
+        "to": 2,
+        "fitness": -2.2462514340877533,
+        "G": 2.2462514340877533,
+        "ami": 0.7955459025180274
+      },
+      "truth_is_local_opt": true,
+      "z2_final_fitness": -4.763369141146541,
+      "z2_ami": 0.7955459025180276,
+      "classification": "ES_DRIFT"
+    },
+    {
+      "seed": 11,
+      "fit_true": -1.1007145643234253,
+      "G_true": 1.1007145643234253,
+      "n_better_neighbours": 3,
+      "best_neighbour": {
+        "task": 0,
+        "to": 3,
+        "fitness": -1.0523688793182373,
+        "G": 1.0523688793182373,
+        "ami": 0.7955459025180274
+      },
+      "truth_is_local_opt": false,
+      "z2_final_fitness": -1.123086425155634,
+      "z2_ami": 0.7955459025180274,
+      "classification": "OBJECTIVE_PREFERS_WRONG (local)"
+    }
+  ],
+  "wall_s": 125.06057834625244
+}
