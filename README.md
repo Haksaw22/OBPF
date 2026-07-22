@@ -1,60 +1,68 @@
-# The Price of Coupling — two honest negatives on factorising loss functions
+# The Price of Coupling — learning a decomposition by closing the gap
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Haksaw22/OBPF/blob/main/playground.ipynb)
 
-Can a learned decomposition split a training objective $L = \sum_t Q_t$ into a few
-near-independent components — skills you could train in parallel on curated data,
-transfer as a library, and read as an anatomy of the objective? The gap
-$\min_\theta \sum_t Q_t - \sum_i \min_\theta D_i \ge 0$ (the *price of coupling*,
-zero iff the components share a minimiser) makes the question exact.
+If a training loss $L = \sum_t Q_t$ is secretly a sum of skills, the exact statement
+of "a good decomposition" is the separability gap
 
-**Two projects, two answers, both negative, each killing a different escape:**
+$$\min_\theta \sum_t Q_t \;-\; \sum_i \min_\theta D_i \;\ge\; 0, \qquad \sum_i D_i = \sum_t Q_t,$$
 
-| | Objective descended | How it died |
-|---|---|---|
-| **Part I — OPBF** | a proxy: gradient-affinity + reconstruction + entropy | lost to k-means / a generic encoder / a *random* partition; warm-started at the truth, its objective walks away (animated in the article) |
-| **Part II — the reboot** | the desideratum itself: finite-K independent-training-then-merge fidelity | pre-registered gate zero killed it: the truth is not a local optimum on 8/12 seeds (merge-operator physics dominates); the repair round showed that removing the artifact removes the signal too, and the artifact-free objective *prefers redundant generalist copies over any decomposition* |
+zero exactly when the components share a minimiser. This project **made the gap the
+training objective of the decomposition** — operationally: train one copy per
+component, merge, score against joint training — and tested it under pre-registered
+kill criteria.
 
-Untouched by both: the idealised equality at exact minimisation — the form nobody can
-descend. The sharpened open question: *what descendable objective has the true
-decomposition as its minimum?*
+**Result: a clean negative with a diagnosable mechanism.** The gate designed to
+catch a lying objective (initialise at the *true* decomposition; check the objective
+wants to stay) killed it: the truth is not a local optimum on 8/12 seeds, and under
+the secondary merge operator the ordering fully inverts. The authorized repair round
+showed the deeper fact — the apparent signal had been merge-operator artifact all
+along, and the artifact-free objective *prefers redundant generalist copies over any
+decomposition*. Full verdict: [reboot/VERDICT-STAGE1.md](reboot/VERDICT-STAGE1.md).
+The sharpened open question: *what descendable objective has the true decomposition
+as its minimum?*
 
 ## Map
 
-- **[BLOG.md](BLOG.md) — the article.** The bet, the three motivations, both deaths
-  with mechanisms, and what survives. Start here.
-- **[playground.ipynb](playground.ipynb)** — rebuilds the headline figures of both
-  parts from raw data; minutes on CPU; pre-executed so it renders without running.
-- **[figures/](figures/)** — including
-  [objective_walks_away.gif](figures/objective_walks_away.gif) (Part I: start at the
-  right answer, watch the proxy leave) and
-  [r1_nowindow.png](figures/r1_nowindow.png) (Part II: the no-signal-window result).
-- **Part I materials:** [data/](data/) (raw result JSONs, copied verbatim from the
-  closed research repo), [revalidation/](revalidation/) (independent re-runs and
-  probe scripts behind every cited number), [REVALIDATION.md](REVALIDATION.md).
-- **Part II materials:** [reboot/](reboot/) — the complete research repo, vendored
-  with its git history intact: [THEORY-DRAFT.md](reboot/THEORY-DRAFT.md) (the
-  formulation, three readings, degeneracies), [NOVELTY.md](reboot/NOVELTY.md)
-  (nine-literature prior-art sweep), [DESIGN-DRAFT.md](reboot/DESIGN-DRAFT.md) (the
-  signed pre-registration — gate numbers dated in git before any run, deviations
-  logged), [VERDICT-STAGE1.md](reboot/VERDICT-STAGE1.md) (the final verdict),
-  [src/](reboot/src/) + [scripts/](reboot/scripts/) (the harness),
-  [results/](reboot/results/) (every gate's raw JSON).
+- **[BLOG.md](BLOG.md) — the article** (abstract up top; formulation, gates, both
+  deaths, mechanisms, what survives). Start here.
+- **[reboot/](reboot/) — the research repo, vendored with its git history intact:**
+  [THEORY-DRAFT.md](reboot/THEORY-DRAFT.md) (formulation, readings, degeneracies),
+  [NOVELTY.md](reboot/NOVELTY.md) (nine-literature prior-art sweep — nearest
+  relatives: Grimm & Singh 2019, IGM/QTRAN, c-BTM/MERIT; the gap is FedAvg's
+  heterogeneity constant $\Gamma$, assumed-never-descended),
+  [DESIGN-DRAFT.md](reboot/DESIGN-DRAFT.md) (the signed pre-registration — gate
+  numbers dated in git before any run; deviations logged),
+  [VERDICT-STAGE1.md](reboot/VERDICT-STAGE1.md) (final verdict),
+  [src/](reboot/src/) + [scripts/](reboot/scripts/) (harness),
+  [results/](reboot/results/) (raw JSON for every gate).
+- **[playground.ipynb](playground.ipynb)** — rebuilds the figures from raw data;
+  minutes on CPU; pre-executed so it renders without running.
+- **[figures/](figures/)** — including [gap_concept.png](figures/gap_concept.png)
+  (the machine), [z2_walkaway.png](figures/z2_walkaway.png) (gate zero) and
+  [r1_nowindow.png](figures/r1_nowindow.png) (the repair round).
 
 ## Reproduce
 
-Figures: `jupyter execute playground.ipynb` (numpy + matplotlib). Part II gates
+Figures: `jupyter execute playground.ipynb` (numpy + matplotlib). The gates
 end-to-end: `python reboot/scripts/run_z1.py`, `run_z2.py`, `diag_z2.py`,
-`run_r1_calib.py` (CPU; the whole empirical arc cost ~3 CPU-hours). Part I's
-underlying experiments live in the closed predecessor repo; the decisive comparisons
-were re-run independently ~8 weeks after closure and reproduced to 2–3 decimals
-(logs in [revalidation/](revalidation/)).
+`run_r1_calib.py` — the entire empirical arc cost ~3 CPU-hours.
 
-## Process notes, briefly
+## Process notes
 
-Every gate number in Part II was fixed and committed before its experiment ran
-(first commit in [reboot/](reboot/) history). Two deviations, both logged with cause
-before use. The pre-committed one-repair-round limit was honoured. The main claims
-(C1/C3/C2) never ran because their precondition — gate zero — never held. Part I's
-numbers were independently revalidated before publication; one error in its closing
-report was caught and corrected ([REVALIDATION.md](REVALIDATION.md)).
+Every gate number was fixed and committed before its experiment ran (first commit in
+the [reboot/](reboot/) history). Two deviations, both logged with cause before use
+(inner optimiser Adam→SGD — Adam's per-parameter normalisation breaks additive
+merges; ES best-seen elitism). The pre-committed one-repair-round limit was
+honoured. The headline claims (recovery vs k-means, coupling curve, parallel
+fidelity) never ran because their precondition — gate zero — never held.
+
+## Legacy
+
+An earlier attempt approached the same wish through a proxy objective (gradient
+affinity) and died differently — its objective walks away from the truth for
+representational reasons. Its autopsy is **deprecated** but kept for the record,
+with raw data and an independent revalidation of every number:
+[legacy/OPBF-autopsy.md](legacy/OPBF-autopsy.md), [data/](data/),
+[revalidation/](revalidation/), [REVALIDATION.md](REVALIDATION.md). Its one lasting
+contribution is this project's gate zero.
