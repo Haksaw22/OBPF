@@ -1,8 +1,9 @@
-# OBPF Stage 1 verdict — gate zero KILLED the operational objective (2026-07-22)
+# OBPF verdict — FINAL: the operational objective cannot see the structure (2026-07-22)
 
-*Pre-registered gates: DESIGN-DRAFT.md (signed 2026-07-22, commit 000a696). Total
-compute spent: ~2.5 CPU-hours, within caps. C1/C3/C2 were NOT run — the
-pre-registration stops everything on a Z2 kill, and Z2 killed.*
+*Pre-registered gates: DESIGN-DRAFT.md (signed 2026-07-22, commit 000a696; R1 repair
+round authorized same day, pre-committed to one round). Total compute: ~3 CPU-hours,
+within caps. C1/C3/C2 never ran — gate zero killed, the repair round failed at its
+own calibration, and the pre-commitment stops there.*
 
 ## What happened, in order
 
@@ -57,18 +58,52 @@ scale, under both pre-registered merge operators.
   end-to-end optimising a partition-train-merge pipeline at this scale recovers
   merge-friendliness, not semantic structure.
 
-## Options (Kulbir decides; no further compute without a new signed design)
+## The repair round (option 2, authorized by Kulbir; R1 in DESIGN)
 
-1. **Stop and bank.** Two-layer honest negative: proxy objectives mis-point (OPBF);
-   the desideratum's cheap surrogate is operator-dominated (OBPF Stage 1). Strong,
-   coherent, article-ready arc — "we then trained on the thing itself, and the
-   measuring instrument bent."
-2. **One repair iteration (new design round, ~1 day):** damped update-sum with a
-   per-evaluation line search $\theta_0 + \alpha \sum_i \Delta_i$, $\alpha \in (0,1]$
-   — removes the overshoot term that produces the artifact; plus a (K × lr) window
-   sweep asking whether any regime exists where coupling signal > artifact > noise.
-   Gate-zero rerun under the repaired operator decides in half a day. Risk: operator
-   whack-a-mole; mitigations: pre-commit to ONE repair round.
-3. **Reframe around the artifact:** the merge-artifact-dominates finding, pointed at
-   the BTM/merging literature, as the deliverable. Smaller claim, closer to their
-   incumbent interest.
+The diagnosed artifact had a specific cure: damped update-sum with a per-evaluation
+line search over the merge step (every partition gets its best damping), plus a full
+(K × lr) window sweep asking whether *any* regime has coupling signal > artifact >
+noise. Result ([results/r1_calib.json](results/r1_calib.json)):
+
+**No cell in {50, 100, 300} × {0.005, 0.02, 0.05} separates true from random.**
+Separation ratios −1.2 to 0.5 against a required 3. Worse — with the artifact
+removed, the **uniform (scaled-copy) family becomes the best partition in most
+cells** (e.g. K=300, lr=0.02: G(uniform) 0.13 vs G(true) 1.70): four damped
+generalists reconstruct joint training almost exactly, while four specialists leave
+each other's features untrained — a deficit no scalar damping can repair.
+
+Two conclusions follow. First, **Z1's original "separation" was entirely the
+overshoot artifact** — what made random partitions look worse than the truth at
+α = 1 was overshoot magnitude, not coupling. Second, once the artifact is removed,
+**the finite-K merge-fidelity gap contains no usable trace of the true structure at
+any probed scale — and actively prefers non-decomposition** (every branch a
+generalist). Merge fidelity, as an objective, opposes specialisation here.
+
+## Final disposition — BANKED, three-layer negative
+
+Per the pre-commitment (one repair round), the project closes. The layered result:
+
+1. **OPBF:** a *proxy* objective for decomposition (gradient affinity) has its
+   argmin away from the true structure — warm-started at the truth, it walks away.
+2. **OBPF gate zero:** the *desideratum itself*, operationalised as finite-K merge
+   fidelity, has its landscape dominated by merge-operator physics — the truth is
+   not a local optimum under either pre-registered operator.
+3. **OBPF R1:** removing the operator artifact removes the signal too, and the
+   artifact-free objective prefers generalist copies over any decomposition. The
+   window in which this objective family could identify structure does not exist at
+   this scale.
+
+Untouched by all three: the idealised equality (reading (A), exact minimisation) —
+intractable to descend, which is the entire practical problem. The residual open
+question is unchanged from the theory draft, now sharpened: *what descendable
+objective has the true decomposition as its minimum?* Three natural candidates are
+now dead: affinity proxies, finite-K merge fidelity, and its damped repair.
+
+Side finding with standalone value: for the branch-train-merge literature, this says
+end-to-end optimising a partition-train-merge pipeline at small scale does not
+recover semantic structure — it recovers merge-friendliness, and merge-friendliness
+prefers redundant generalists. (Consistent with why c-BTM's clusters help at LLM
+scale for *capacity* reasons, not structure-recovery reasons.)
+
+The article can now be written on a complete, coherent arc; that decision is
+Kulbir's, per the standing gate.
