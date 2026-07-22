@@ -1,83 +1,60 @@
-# OPBF — an honest negative result
+# The Price of Coupling — two honest negatives on factorising loss functions
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Haksaw22/OBPF/blob/main/playground.ipynb)
 
-**Optimisation-Preserving Behavioural Factorisation**: can a learned, differentiable
-factoriser decompose a training objective (`L = Σᵢ Zᵢ`) into a few near-independent
-latent factors — for parallel training, transfer, and interpretability? In spirit,
-*ICA for objectives*.
+Can a learned decomposition split a training objective $L = \sum_t Q_t$ into a few
+near-independent components — skills you could train in parallel on curated data,
+transfer as a library, and read as an anatomy of the objective? The gap
+$\min_\theta \sum_t Q_t - \sum_i \min_\theta D_i \ge 0$ (the *price of coupling*,
+zero iff the components share a minimiser) makes the question exact.
 
-**Answer: no.** Across seven applications and pivots, every learned OPBF mechanism lost
-to a fair — usually trivial — baseline, under pre-registered numeric gates and
-adversarial verification:
+**Two projects, two answers, both negative, each killing a different escape:**
 
-| Claim | Fair baseline that wins | Score |
+| | Objective descended | How it died |
 |---|---|---|
-| Group recovery (soft assignment) | k-means on the same signal | 0.84 vs **0.98** AMI |
-| Group recovery (learned *hard* assignment) | k-means | 0.73 vs **0.98** AMI, p=5e-4 |
-| Frozen-factor transfer | generic frozen encoder (equal size/budget) | 0.888 vs **0.997**, p=5e-5 |
-| Interpretability (do-intervention localisation) | a random partition | spillover 0.47/0.71 vs **0.36/0.44** |
-| Conflict-aware optimisation under drift | GradVac | tie; smoothing *hurts* under fast drift |
-| Conflict signal as a training diagnostic | PCGrad + momentum | 0.057 vs **0.042** |
-| Active probing for identification (RL-pivot precondition) | uniform coverage | tie at AMI 1.0 |
+| **Part I — OPBF** | a proxy: gradient-affinity + reconstruction + entropy | lost to k-means / a generic encoder / a *random* partition; warm-started at the truth, its objective walks away (animated in the article) |
+| **Part II — the reboot** | the desideratum itself: finite-K independent-training-then-merge fidelity | pre-registered gate zero killed it: the truth is not a local optimum on 8/12 seeds (merge-operator physics dominates); the repair round showed that removing the artifact removes the signal too, and the artifact-free objective *prefers redundant generalist copies over any decomposition* |
 
-**Root cause:** learned soft grouping is a *dominated middle* — when structure is
-recoverable, hard clustering on the same signal recovers it better; when it isn't, soft
-assignment is lossy and every downstream payoff inherits the loss. Independent
-revalidation sharpened this: even warm-started *at* the k-means solution, the
-factoriser's own training objective walks away from the true partition — the objective,
-not the optimiser, is misaligned.
-
-## Honest status
-
-- The project is **closed** (self-closed 2026-05-30 after ~70 hours across three
-  generations; the closing commit reads "project banked — does not have wings").
-- Every load-bearing number here was **independently revalidated** (2026-07-22) against
-  the raw code and data before publication: baseline fairness audited at code level,
-  decisive comparisons re-run and reproduced, two untried rescue routes tried (both
-  fail), one erroneous figure in the closure report caught and corrected. See
-  [REVALIDATION.md](REVALIDATION.md).
-- Not done, stated plainly: the co-adaptation regime (the one place differentiable
-  grouping could in principle win) was closed by argument, not experiment; drift of the
-  *conflict structure* was never exercised; everything is CPU-scale synthetic/bandit/toy-MTL.
+Untouched by both: the idealised equality at exact minimisation — the form nobody can
+descend. The sharpened open question: *what descendable objective has the true
+decomposition as its minimum?*
 
 ## Map
 
-- **[BLOG.md](BLOG.md) — "The Price of Coupling."** The write-up: the idea, the three
-  reasons it should have worked, the scoreboard, and the mechanism of the failure —
-  including an animation of the factoriser being handed the correct answer and
-  training itself away from it. Start here.
-- **[REVALIDATION.md](REVALIDATION.md)** — the independent verification pass behind
-  every number cited.
-- **[playground.ipynb](playground.ipynb)** — rebuilds the headline figures from the raw
-  data in minutes on CPU; pre-executed so it renders without running anything.
-- **[figures/](figures/)** — the blog's figures, including
-  [objective_walks_away.gif](figures/objective_walks_away.gif) (a real training run:
-  initialise at the true partition, minimise OPBF's own objective, watch agreement
-  with the truth fall while the loss goes down).
-- **[data/](data/)** — raw result JSONs copied verbatim from the closed research repo
-  (E6 transfer, E7 recovery, E9 interpretability, E10 optimiser, E1 smoke).
-- **[revalidation/](revalidation/)** — re-run logs and probe scripts from the
-  revalidation pass (hard-vs-k-means re-run, tpcgrad arc reproduction, missed-exit
-  probes).
+- **[BLOG.md](BLOG.md) — the article.** The bet, the three motivations, both deaths
+  with mechanisms, and what survives. Start here.
+- **[playground.ipynb](playground.ipynb)** — rebuilds the headline figures of both
+  parts from raw data; minutes on CPU; pre-executed so it renders without running.
+- **[figures/](figures/)** — including
+  [objective_walks_away.gif](figures/objective_walks_away.gif) (Part I: start at the
+  right answer, watch the proxy leave) and
+  [r1_nowindow.png](figures/r1_nowindow.png) (Part II: the no-signal-window result).
+- **Part I materials:** [data/](data/) (raw result JSONs, copied verbatim from the
+  closed research repo), [revalidation/](revalidation/) (independent re-runs and
+  probe scripts behind every cited number), [REVALIDATION.md](REVALIDATION.md).
+- **Part II materials:** [reboot/](reboot/) — the complete research repo, vendored
+  with its git history intact: [THEORY-DRAFT.md](reboot/THEORY-DRAFT.md) (the
+  formulation, three readings, degeneracies), [NOVELTY.md](reboot/NOVELTY.md)
+  (nine-literature prior-art sweep), [DESIGN-DRAFT.md](reboot/DESIGN-DRAFT.md) (the
+  signed pre-registration — gate numbers dated in git before any run, deviations
+  logged), [VERDICT-STAGE1.md](reboot/VERDICT-STAGE1.md) (the final verdict),
+  [src/](reboot/src/) + [scripts/](reboot/scripts/) (the harness),
+  [results/](reboot/results/) (every gate's raw JSON).
 
 ## Reproduce
 
-The scoreboard figures: `jupyter execute playground.ipynb` (matplotlib + numpy only).
+Figures: `jupyter execute playground.ipynb` (numpy + matplotlib). Part II gates
+end-to-end: `python reboot/scripts/run_z1.py`, `run_z2.py`, `diag_z2.py`,
+`run_r1_calib.py` (CPU; the whole empirical arc cost ~3 CPU-hours). Part I's
+underlying experiments live in the closed predecessor repo; the decisive comparisons
+were re-run independently ~8 weeks after closure and reproduced to 2–3 decimals
+(logs in [revalidation/](revalidation/)).
 
-The underlying experiments live in the closed source project (three generations: a spec
-suite, a first implementation, and the clean rewrite `opbf2` whose committed harness
-produced everything cited here). The revalidation re-ran the decisive comparisons from
-that committed code ~8 weeks after closure and reproduced them to 2–3 decimals; the
-re-run logs are archived here.
+## Process notes, briefly
 
-## What's reusable
-
-If you're tempted by learned objective factorisation, the transferable assets are:
-the fair-baseline suite (k-means / generic encoder / random partition / PCGrad+momentum
-/ GradVac), the best-learning-rate-per-method protocol, out-of-sample holdout as a
-non-negotiable, and the scoreboard above as prior evidence.
-
----
-
-*Status: draft pending author review; not yet published.*
+Every gate number in Part II was fixed and committed before its experiment ran
+(first commit in [reboot/](reboot/) history). Two deviations, both logged with cause
+before use. The pre-committed one-repair-round limit was honoured. The main claims
+(C1/C3/C2) never ran because their precondition — gate zero — never held. Part I's
+numbers were independently revalidated before publication; one error in its closing
+report was caught and corrected ([REVALIDATION.md](REVALIDATION.md)).
