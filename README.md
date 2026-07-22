@@ -1,5 +1,7 @@
 # OPBF — an honest negative result
 
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Haksaw22/OBPF/blob/main/playground.ipynb)
+
 **Optimisation-Preserving Behavioural Factorisation**: can a learned, differentiable
 factoriser decompose a training objective (`L = Σᵢ Zᵢ`) into a few near-independent
 latent factors — for parallel training, transfer, and interpretability? In spirit,
