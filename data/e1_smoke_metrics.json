@@ -1,0 +1,71 @@
+{
+  "config": {
+    "objective": "separable",
+    "variant": "linear",
+    "n_factors": 4,
+    "trainer": {
+      "steps": 200,
+      "batch_size": 128,
+      "eval_every": 50
+    },
+    "gate": {
+      "rec_nmae": [
+        "<=",
+        0.2
+      ]
+    }
+  },
+  "seed": 0,
+  "history": [
+    {
+      "step": 0,
+      "rec_nmae": 0.4975000321865082,
+      "ami": -0.15141391885985256,
+      "ari": -0.10315186246418338,
+      "hungarian": 0.3333333333333333,
+      "active_factor_count": 4,
+      "decomposition_gap": 2.6333656311035156
+    },
+    {
+      "step": 50,
+      "rec_nmae": 0.3658497929573059,
+      "ami": 0.0,
+      "ari": 0.0,
+      "hungarian": 0.25,
+      "active_factor_count": 2,
+      "decomposition_gap": 1.9810243844985962
+    },
+    {
+      "step": 100,
+      "rec_nmae": 0.2588716149330139,
+      "ami": 0.0,
+      "ari": 0.0,
+      "hungarian": 0.25,
+      "active_factor_count": 1,
+      "decomposition_gap": 1.561981439590454
+    },
+    {
+      "step": 150,
+      "rec_nmae": 0.19788169860839844,
+      "ami": 0.0,
+      "ari": 0.0,
+      "hungarian": 0.25,
+      "active_factor_count": 1,
+      "decomposition_gap": 1.0458073616027832
+    }
+  ],
+  "final": {
+    "rec_nmae": 0.1617567390203476,
+    "ami": 0.0,
+    "ari": 0.0,
+    "hungarian": 0.25,
+    "active_factor_count": 1,
+    "decomposition_gap": 0.881447434425354
+  },
+  "gate": {
+    "passed": true,
+    "detail": {
+      "rec_nmae": true
+    }
+  }
+}

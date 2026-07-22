@@ -1,0 +1,180 @@
+{
+  "results": {
+    "separable": {
+      "spillover": {
+        "mean": 0.4651667594909668,
+        "vals": [
+          0.44,
+          0.421,
+          0.592,
+          0.44,
+          0.433
+        ]
+      },
+      "consistency": {
+        "mean": 0.9,
+        "vals": [
+          0.75,
+          1.0,
+          1.0,
+          1.0,
+          0.75
+        ]
+      },
+      "ami": {
+        "mean": 0.44807690434264413,
+        "vals": [
+          0.529,
+          0.411,
+          0.409,
+          0.297,
+          0.595
+        ]
+      },
+      "hg_spillover": {
+        "mean": 0.0,
+        "vals": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "hg_consistency": {
+        "mean": 1.0,
+        "vals": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "rand_spillover": {
+        "mean": 0.35885947942733765,
+        "vals": [
+          0.254,
+          0.332,
+          0.545,
+          0.388,
+          0.277
+        ]
+      },
+      "rand_consistency": {
+        "mean": 0.85,
+        "vals": [
+          0.75,
+          0.75,
+          1.0,
+          0.75,
+          1.0
+        ]
+      }
+    },
+    "coupled": {
+      "spillover": {
+        "mean": 0.7105374932289124,
+        "vals": [
+          0.684,
+          0.74,
+          0.692,
+          0.725,
+          0.712
+        ]
+      },
+      "consistency": {
+        "mean": 0.85,
+        "vals": [
+          1.0,
+          1.0,
+          0.75,
+          0.5,
+          1.0
+        ]
+      },
+      "ami": {
+        "mean": 0.0361492529702019,
+        "vals": [
+          -0.085,
+          -0.011,
+          0.279,
+          0.141,
+          -0.143
+        ]
+      },
+      "hg_spillover": {
+        "mean": 0.11998356580734253,
+        "vals": [
+          0.105,
+          0.118,
+          0.128,
+          0.126,
+          0.123
+        ]
+      },
+      "hg_consistency": {
+        "mean": 1.0,
+        "vals": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "rand_spillover": {
+        "mean": 0.44435700178146365,
+        "vals": [
+          0.284,
+          0.513,
+          0.607,
+          0.409,
+          0.409
+        ]
+      },
+      "rand_consistency": {
+        "mean": 0.9,
+        "vals": [
+          0.75,
+          0.75,
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    "config": {
+      "n_seeds": 5,
+      "steps": 1500,
+      "coupling_weight": 2.0,
+      "coupled_strength": 1.0
+    }
+  },
+  "gate": {
+    "separable": {
+      "passed": false,
+      "spillover_ok": false,
+      "consistency_ok": true,
+      "spillover_mean": 0.4651667594909668,
+      "consistency_mean": 0.9,
+      "hg_spillover_mean": 0.0,
+      "hg_consistency_mean": 1.0,
+      "rand_spillover_mean": 0.35885947942733765,
+      "opbf_beats_random_spillover": false,
+      "ami_mean": 0.44807690434264413
+    },
+    "coupled": {
+      "passed": false,
+      "spillover_ok": false,
+      "consistency_ok": true,
+      "spillover_mean": 0.7105374932289124,
+      "consistency_mean": 0.85,
+      "hg_spillover_mean": 0.11998356580734253,
+      "hg_consistency_mean": 1.0,
+      "rand_spillover_mean": 0.44435700178146365,
+      "opbf_beats_random_spillover": false,
+      "ami_mean": 0.0361492529702019
+    }
+  }
+}

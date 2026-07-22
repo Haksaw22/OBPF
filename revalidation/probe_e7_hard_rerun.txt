@@ -1,0 +1,21 @@
+﻿  seed 0: soft=1.000  hard=0.798  kmeans=1.000
+  seed 1: soft=1.000  hard=0.798  kmeans=1.000
+  seed 2: soft=1.000  hard=0.798  kmeans=1.000
+  seed 3: soft=0.798  hard=0.798  kmeans=1.000
+  seed 4: soft=0.796  hard=0.641  kmeans=0.796
+  seed 5: soft=0.608  hard=0.600  kmeans=1.000
+  seed 6: soft=0.798  hard=0.600  kmeans=1.000
+  seed 7: soft=1.000  hard=0.798  kmeans=1.000
+  seed 8: soft=1.000  hard=0.798  kmeans=1.000
+  seed 9: soft=0.600  hard=0.600  kmeans=1.000
+  seed 10: soft=1.000  hard=0.798  kmeans=1.000
+  seed 11: soft=1.000  hard=0.798  kmeans=1.000
+
+AMI (mean +/- 95% CI, 12 seeds):
+  soft-OPBF    0.883 +/- 0.089
+  hard-OPBF    0.736 +/- 0.053   (the learned hard partition)
+  KMeans       0.983 +/- 0.033   (trivial post-hoc clustering)
+  hard-OPBF vs KMeans: d=-0.247  paired p=0.0005
+
+PRE-REGISTERED GATE (hard>=0.85 AND hard>=KMeans w/ non-overlapping CI): FAIL
+=> learned hard factoriser does NOT beat trivial clustering.

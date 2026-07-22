@@ -1,0 +1,11 @@
+
+#### coupling=0.3  noise=0.0  (transient if c<=0.5) ####
+  pcgrad      holdout AUC 0.0671 +/-0.0176  [lr=0.2, beta=0.0]
+  gradvac     holdout AUC 0.0683 +/-0.0174  [lr=0.2, beta=0.5]
+  tpcgrad     holdout AUC 0.0565 +/-0.0146  [lr=0.2, beta=0.5]
+  tsum        holdout AUC 0.0593 +/-0.0148  [lr=0.2, beta=0.5]
+  pcgrad_mom  holdout AUC 0.0417 +/-0.0112  [lr=0.2, beta=0.5]
+  tpcgrad vs pcgrad d=-0.0106 p=0.0005 | vs gradvac d=-0.0117 p=0.0005  -> WIN_BOTH_HOLDOUT=True
+  [momentum control] tsum vs pcgrad d=-0.0078 p=0.0034
+
+#### coupling=0.3  noise=1.0  (transient if c<=0.5) ####
