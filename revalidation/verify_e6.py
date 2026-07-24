@@ -1,8 +1,9 @@
-import json, statistics
+import json, os, statistics
 import numpy as np
 from scipy.stats import wilcoxon, mannwhitneyu
 
-with open(r"C:/Users/kulbi/Documents/Coding/OPBF/opbf2/results/e6/e6_results.json") as fh:
+OPBF_ROOT = os.environ.get("OPBF_ROOT", "<path-to-OPBF-checkout>/opbf2")
+with open(os.path.join(OPBF_ROOT, "results/e6/e6_results.json")) as fh:
     d = json.load(fh)
 res = d["results"]; gate = d["gate"]
 print("config:", res["config"])

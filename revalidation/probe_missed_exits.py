@@ -15,10 +15,11 @@ Per seed:
 """
 from __future__ import annotations
 
+import os
 import statistics
 import sys
 
-sys.path.insert(0, r"C:/Users/kulbi/Documents/Coding/OPBF/opbf2/src")
+sys.path.insert(0, os.environ.get("OPBF_SRC", "<path-to-OPBF-checkout>/opbf2/src"))
 
 import torch
 import torch.nn.functional as F

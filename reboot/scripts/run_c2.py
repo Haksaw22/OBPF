@@ -7,6 +7,7 @@ split). Gate: mean loss gap <= 5% of joint.
 from __future__ import annotations
 
 import json
+import os
 import statistics
 import sys
 import time
@@ -14,7 +15,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "src"))
-sys.path.insert(0, r"C:/Users/kulbi/Documents/Coding/OPBF/opbf2/src")
+sys.path.insert(0, os.environ.get("OPBF_SRC", "<path-to-OPBF-checkout>/opbf2/src"))
 
 import torch  # noqa: E402
 from opbf2.eval.e7_mtl import factor_parallel_vs_joint, _pred_to_groups  # noqa: E402

@@ -10,10 +10,11 @@ all outputs live in OBPF/.
 from __future__ import annotations
 
 import copy
+import os
 import statistics
 import sys
 
-sys.path.insert(0, r"C:/Users/kulbi/Documents/Coding/OPBF/opbf2/src")
+sys.path.insert(0, os.environ.get("OPBF_SRC", "<path-to-OPBF-checkout>/opbf2/src"))
 
 import torch
 from torch.nn.utils import parameters_to_vector, vector_to_parameters

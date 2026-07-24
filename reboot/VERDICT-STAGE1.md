@@ -58,7 +58,7 @@ scale, under both pre-registered merge operators.
   end-to-end optimising a partition-train-merge pipeline at this scale recovers
   merge-friendliness, not semantic structure.
 
-## The repair round (option 2, authorized by Kulbir; R1 in DESIGN)
+## The repair round (option 2, authorized 2026-07-22; R1 in DESIGN)
 
 The diagnosed artifact had a specific cure: damped update-sum with a per-evaluation
 line search over the merge step (every partition gets its best damping), plus a full
@@ -105,5 +105,4 @@ recover semantic structure — it recovers merge-friendliness, and merge-friendl
 prefers redundant generalists. (Consistent with why c-BTM's clusters help at LLM
 scale for *capacity* reasons, not structure-recovery reasons.)
 
-The article can now be written on a complete, coherent arc; that decision is
-Kulbir's, per the standing gate.
+The article can now be written on a complete, coherent arc.

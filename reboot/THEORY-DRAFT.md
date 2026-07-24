@@ -1,12 +1,12 @@
 # OBPF reboot — theory draft v0
 
-*Status: **APPROVED by Kulbir 2026-07-22** — three-readings fork resolved as proposed
+*Status: **Approved 2026-07-22** — three-readings fork resolved as proposed
 ((C) merge-fidelity operational, (A) compatible-demands theory, (B) parameter-partition
 baseline); degeneracy handling approved. Experiment design lives in DESIGN-DRAFT.md
 (separate sign-off gates any compute). Predecessor (OPBF: affinity-proxy factorisation
 of given loss terms) is closed and its negative stands; this is a different mechanism.*
 
-## 0. The formulation (Kulbir, 2026-07-22)
+## 0. The formulation (2026-07-22)
 
 Raw per-timestep contributions $Q_t$ — data per timestep, not hand-enumerated loss
 terms. A learnt decomposition $D_i = f_i(\{Q_t\})$, possibly $D_i = \sum_j d_{ij}$,
@@ -20,7 +20,7 @@ never optimised this — that is the delta that reopens the question.
 
 ## 1. Setup and the gap
 
-Data stream indexed by $t$; per-datum loss $\ell_t(\theta)$ (Kulbir's $Q_t$); total
+Data stream indexed by $t$; per-datum loss $\ell_t(\theta)$ (the $Q_t$ above); total
 $L(\theta) = \sum_t \ell_t(\theta)$. The simplest learnable decomposition family is a
 **soft partition of the stream**: weights $w_{it} \ge 0$, $\sum_i w_{it} = 1$,
 
@@ -70,7 +70,7 @@ minimised over $w$ by unrolled differentiation (MAML-style) or evolution strateg
 This is the version an experiment actually tests, and the version the parallel-training
 motivation actually needs. (A) is its $K \to \infty$, exact-merge idealisation.
 
-**Working choice, pending Kulbir:** target (C) as the operational objective, keep (A)
+**Working choice:** target (C) as the operational objective, keep (A)
 as the theory story, treat (B) as a baseline (given parameter blocks) rather than a
 result.
 
@@ -159,7 +159,6 @@ NOVELTY.md.
 
 ## 7. Naming
 
-Working name **OBPF** (matching the GitHub repo Kulbir created). Backronym candidate:
+Working name **OBPF** (matching this project's GitHub repo). Backronym candidate:
 *Objective decomposition By Parallel-training Fidelity* — accurate, since fidelity of
-independent-then-merged training to joint training is literally the loss. Kulbir's
-call.
+independent-then-merged training to joint training is literally the loss.

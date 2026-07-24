@@ -11,6 +11,7 @@ Gate: Spearman rho >= 0.8 over knob settings. Kill: rho < 0.5.
 from __future__ import annotations
 
 import json
+import os
 import statistics
 import sys
 import time
@@ -19,7 +20,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "src"))
-sys.path.insert(0, r"C:/Users/kulbi/Documents/Coding/OPBF/opbf2/src")
+sys.path.insert(0, os.environ.get("OPBF_SRC", "<path-to-OPBF-checkout>/opbf2/src"))
 
 KNOBS = [0.0, 0.5, 1.0, 2.0, 5.0]
 SEEDS = list(range(6))

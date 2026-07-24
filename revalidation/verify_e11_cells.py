@@ -1,15 +1,16 @@
 """Re-run the decisive (b)-closure cells from probe_e11_tpcgrad.py (read-only verification).
 
 Cells: coupling=0.3 (transient) x noise in {0.0, 1.0}. Logic copied verbatim from
-C:/Users/kulbi/Documents/Coding/OPBF/opbf2/scripts/probe_e11_tpcgrad.py
+probe_e11_tpcgrad.py in the OPBF checkout (opbf2/scripts/).
 """
 from __future__ import annotations
 
 import math
+import os
 import statistics
 import sys
 
-sys.path.insert(0, r"C:/Users/kulbi/Documents/Coding/OPBF/opbf2/src")
+sys.path.insert(0, os.environ.get("OPBF_SRC", "<path-to-OPBF-checkout>/opbf2/src"))
 
 import torch  # noqa: E402
 
