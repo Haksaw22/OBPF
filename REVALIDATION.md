@@ -1,11 +1,13 @@
 # Independent revalidation of the OPBF closure (2026-07-22)
 
-Before anything from the OPBF project's own closure report was repeated publicly, the
-project's load-bearing claims were re-verified against the actual code and raw data, by
-a fresh set of eyes (an orchestrated verification pass, ~8 weeks after the project
-closed). Motivation: OPBF was largely agent-executed, and agent self-reports can inherit
-agent failure modes — unfair baselines, premature closure, miscalibrated
-hyperparameters. Nothing in the blog is cited on the project's word alone.
+Before anything from the OPBF project's own closure report was repeated publicly, its
+load-bearing claims were re-verified with fresh eyes against the actual code and raw
+data, about eight weeks after the project closed. The reason for the ceremony: the
+project leaned heavily on AI agents to execute, and a self-report from that kind of
+run can inherit the run's own blind spots — unfair baselines, premature closure,
+miscalibrated hyperparameters. So nothing public is cited on the project's word
+alone; every load-bearing number below was either reproduced from the committed code
+or corrected.
 
 **Verdict: REVISED — the close stands and is strengthened; specific claims corrected.**
 

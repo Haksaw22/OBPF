@@ -27,11 +27,11 @@ as its minimum?*
 - **[BLOG.md](BLOG.md) — the article** (abstract up top; formulation, gates, both
   deaths, mechanisms, what survives). Start here.
 - **[reboot/](reboot/) — the research repo, vendored with its git history intact:**
-  [THEORY-DRAFT.md](reboot/THEORY-DRAFT.md) (formulation, readings, degeneracies),
+  [THEORY.md](reboot/THEORY.md) (formulation, readings, degeneracies),
   [NOVELTY.md](reboot/NOVELTY.md) (nine-literature prior-art sweep — nearest
   relatives: Grimm & Singh 2019, IGM/QTRAN, c-BTM/MERIT; the gap is FedAvg's
   heterogeneity constant $\Gamma$, assumed-never-descended),
-  [DESIGN-DRAFT.md](reboot/DESIGN-DRAFT.md) (the signed pre-registration — gate
+  [DESIGN.md](reboot/DESIGN.md) (the signed pre-registration — gate
   numbers dated in git before any run; deviations logged),
   [VERDICT-STAGE1.md](reboot/VERDICT-STAGE1.md) (final verdict),
   [src/](reboot/src/) + [scripts/](reboot/scripts/) (harness),

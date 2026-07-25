@@ -9,12 +9,12 @@
 ## A loss is a sum, and sums hide anatomy
 
 Almost everything we train is graded by a sum: $L = \sum_t Q_t$, thousands of
-per-timestep loss contributions handed to an optimiser as one number. The index $t$
-is bookkeeping. If the objective is secretly built from a few underlying skills, the
+per-timestep loss contributions handed to an optimiser as one number — the index $t$
+is just bookkeeping. If the objective is secretly built from a few underlying skills, the
 sum does not say which contributions belong to which skill — and gradient descent,
 which only ever sees the sum, cannot care.
 
-I wanted the anatomy, for three reasons that stand independently of what follows.
+I wanted the anatomy, for three reasons — none of which really depend on how this ends.
 Partly for parallelism: if the skills separate even approximately, you can curate
 data for one skill and train on it without trampling the others — every skill at
 once, on separate workers, ideally with autonomy granted gradually as each part
@@ -42,7 +42,8 @@ $$\min_\theta \sum_t Q_t(\theta) \;\geq\; \sum_i \min_\theta D_i(\theta),$$
 with equality exactly when the components share a common minimiser. The gap is the
 **price of coupling**: what you lose by optimising the parts separately instead of
 together. My proposal was to make the gap itself the training objective of the
-decomposition — find the split whose parts, trained apart, still add up to the whole.
+decomposition — why not ask directly for the split whose parts, trained apart, still
+add up to the whole?
 
 The picture that makes this a *skills* story: a component holding one skill's data
 should pin down the parameter directions that skill needs and be flat —
@@ -70,21 +71,21 @@ minimiser trivially and decompose nothing. I guarded the exclusion with a
 disjointness penalty on the partition weights — though, as it turned out, the
 objective had stronger opinions about this family than the penalty did.
 
-I searched nine adjacent literatures for this object before building it. The
-nearest relatives: reward decompositions optimised for independence (Grimm & Singh
+I searched nine adjacent literatures for this object before building it ([the
+sweep, per-area verdicts included](reboot/NOVELTY.md)). The nearest relatives: reward decompositions optimised for independence (Grimm & Singh
 2019), the IGM condition in multi-agent RL — equality of argmaxes by construction,
 over actions, with the partition given — and partition-train-merge pipelines whose
 partitions come from proxies like embedding clustering (c-BTM) or gradient conflict
 (MERIT). In federated learning the gap itself has a standard name, the heterogeneity
 constant $\Gamma = F^* - \sum_k p_k F_k^*$, where it is assumed for a given client
 partition and used in convergence bounds — and, as far as I could find, never used
-as a trainable objective over a learned decomposition. Make of that what you will;
-I took it as sufficient reason to run the experiment.
+as a trainable objective over a learned decomposition. Make of that what you will —
+I took it as reason enough to run the experiment.
 
 ## Rules before results
 
 Everything below was pre-registered — gate numbers fixed and committed (dated, in
-[the repo history](reboot/DESIGN-DRAFT.md)) before any experiment ran, deviations
+[the repo history](reboot/DESIGN.md)) before any experiment ran, deviations
 logged with cause, and one repair round pre-committed as the maximum.
 
 The load-bearing gate deserves its one sentence of history. An earlier attempt at
@@ -105,7 +106,7 @@ partition weights $w \in \mathbb{R}^{12 \times 4}$ optimised by evolution strate
 (no unrolling bias), inner training by SGD. That last choice was itself a logged
 finding: Adam's per-parameter normalisation moves zero-gradient parameters at full
 step size, which quietly destroys *any* additive merge regardless of partition
-quality. Adam breaks merging. File that one away.
+quality. Adam breaks merging — file that one away.
 
 ## Gate zero
 
@@ -117,7 +118,7 @@ the truth's $\approx 1.0$). Then Z2 ran.
 ![gate zero](figures/z2_walkaway.png)
 *Twelve seeds, each initialised at the true partition, each fully optimised on the
 gap objective. Mean final agreement with the truth: 0.59, far below the
-pre-registered kill line.* ([raw results](reboot/results/z2.json))
+pre-registered kill line of 0.90.* ([raw results](reboot/results/z2.json))
 
 The kill criterion fired. And the important question — is this the objective's
 preference, or just optimiser noise? — has an optimiser-free answer: evaluate the
@@ -132,8 +133,8 @@ four decent models. Averaging rewards mixing; mixing is the opposite of anatomy.
 So the finding at gate zero: the operational gap decomposes as **coupling signal
 plus merge-operator artifact, and near the truth the artifact is most of what the
 objective sees**. Update-sum prefers partitions with favourable travel geometry;
-averaging prefers redundancy. The objective *was* the desideratum this time — and
-the measuring instrument bent anyway.
+averaging prefers redundancy. The objective *was* the thing I actually wanted this
+time — and the measuring instrument bent anyway.
 
 ## The repair round
 
@@ -149,7 +150,7 @@ the overshoot artifact removed they are statistically indistinguishable in every
 cell — and the uniform-copies family (green) is frequently the best "decomposition"
 in the grid.* ([raw results](reboot/results/r1_calib.json))
 
-No cell separates. Two conclusions, each worth the day it cost. First, the
+No cell separates — two conclusions, each worth the day it cost. First, the
 separation that Z1 had certified was **entirely the artifact**: what made random
 partitions look worse than the truth was overshoot magnitude, never coupling.
 Second, with the artifact gone the objective does not merely fail to find the
@@ -169,7 +170,7 @@ a different reason, and archived: the affinity proxy. Standing, untested rather 
 refuted: the idealised equality itself, at exact minimisation — which is precisely
 the form nobody can descend. That is the residue, and it is sharper than where I
 started: **what descendable objective has the true decomposition as its minimum?**
-After running the honest version of the experiment, I believe this is a real
+Having run the honest version of the experiment, I really do think this is a
 question about objectives, not an engineering gap, and the corpses above are its
 boundary markers. It is the question the ground-up rework is aimed at.
 
@@ -177,8 +178,8 @@ A side observation that stands alone: for the branch-train-merge line of work, t
 says end-to-end optimising the partition-train-merge pipeline at small scale would
 not recover semantic structure — it recovers *merge-friendliness*, and
 merge-friendliness prefers redundant generalists. Proxy partitions like embedding
-clustering may be doing those systems a favour precisely by not being optimal for
-the merge.
+clustering are probably doing those systems a favour precisely by not being optimal
+for the merge.
 
 Three things survive the wreck. The negative itself, pre-registered end to end:
 every gate number written and dated before its experiment, two deviations logged
@@ -190,8 +191,8 @@ precondition never held. The full gate trail, harness, and raw results are in
 The warm-start-at-the-answer test, cheap and brutal and now two-for-two against
 structure-finding objectives. If you are designing a loss that is supposed to
 *discover* something, initialise at the ground truth and check the loss wants to
-stay. Minutes of compute; it would have saved each of these projects its respective
-illusion.
+stay. It costs minutes of compute, and it would probably have saved each of these
+projects its illusion.
 
 And two portable facts. Adam silently breaks additive model merging (per-parameter
 normalisation walks zero-gradient parameters). And a surrogate can fail in two
@@ -207,8 +208,8 @@ decomposition is exactly the thing you cannot descend, and the descendable stand
 tried here — including the most faithful one I could construct — either measure
 their own operators or prefer redundancy. The gap between wanting structure and
 writing down a loss whose argmin *is* that structure was the whole project. It is
-still open. It now has a fence around it with the dead ends labelled, which is what
-negative results are for.
+still open — but now it has a fence around it with the dead ends labelled, which is
+what negative results are for.
 
 ---
 

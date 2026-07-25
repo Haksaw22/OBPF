@@ -3,7 +3,7 @@
 *Status: **Signed off 2026-07-22.** This document is the pre-registration: every
 gate number was fixed before any result was seen; deviations get logged in the dated
 DEVIATIONS section at the bottom; demotions get published. Theory basis:
-THEORY-DRAFT.md (approved 2026-07-22, reading (C) operational). Tier: **M** — CPU
+THEORY.md (approved 2026-07-22, reading (C) operational). Tier: **M** — CPU
 only, hard cap 2 days wall-clock including analysis.*
 
 ## 1. Objects

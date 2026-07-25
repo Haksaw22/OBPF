@@ -1,6 +1,6 @@
 # OBPF verdict — FINAL: the operational objective cannot see the structure (2026-07-22)
 
-*Pre-registered gates: DESIGN-DRAFT.md (signed 2026-07-22, commit 000a696; R1 repair
+*Pre-registered gates: DESIGN.md (signed 2026-07-22, commit 000a696; R1 repair
 round authorized same day, pre-committed to one round). Total compute: ~3 CPU-hours,
 within caps. C1/C3/C2 never ran — gate zero killed, the repair round failed at its
 own calibration, and the pre-commitment stops there.*
