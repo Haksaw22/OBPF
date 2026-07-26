@@ -3,7 +3,7 @@
 *Status: **Signed off 2026-07-22.** This document is the pre-registration: every
 gate number was fixed before any result was seen; deviations get logged in the dated
 DEVIATIONS section at the bottom; demotions get published. Theory basis:
-THEORY.md (approved 2026-07-22, reading (C) operational). Tier: **M** — CPU
+THEORY.md (frozen 2026-07-22, reading (C) operational). Tier: **M** — CPU
 only, hard cap 2 days wall-clock including analysis.*
 
 ## 1. Objects
@@ -124,7 +124,7 @@ scope for these gates and get their own design if Stage 1 passes.
 Z1 → Z2 → C1 → C3 → C2 → verdict doc (per-gate outcomes, PASS/PARTIAL/KILL stated
 plainly) → only then the article question reopens.
 
-## R1 — the one repair round (authorized 2026-07-22, going with the damped-merge repair)
+## R1 — the one repair round (pre-authorized 2026-07-22, going with the damped-merge repair)
 
 *Pre-committed: ONE round. Numbers below fixed before any R1 run. If the repaired
 operator also fails gate zero, the negative is final and the project banks.*

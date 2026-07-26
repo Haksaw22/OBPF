@@ -15,7 +15,7 @@ kill criteria.
 **Result: a clean negative with a diagnosable mechanism.** The gate designed to
 catch a lying objective (initialise at the *true* decomposition; check the objective
 wants to stay) killed it: the truth is not a local optimum on 8/12 seeds, and under
-the secondary merge operator the ordering fully inverts. The authorized repair round
+the secondary merge operator the ordering fully inverts. The pre-authorized repair round
 showed the deeper fact — the apparent signal had been merge-operator artifact all
 along, and the artifact-free objective *prefers redundant generalist copies over any
 decomposition*. Full verdict: [reboot/VERDICT-STAGE1.md](reboot/VERDICT-STAGE1.md).
@@ -66,3 +66,5 @@ with raw data and an independent revalidation of every number:
 [legacy/OPBF-autopsy.md](legacy/OPBF-autopsy.md), [data/](data/),
 [revalidation/](revalidation/), [REVALIDATION.md](REVALIDATION.md). Its one lasting
 contribution is this project's gate zero.
+
+Code and text: [MIT License](LICENSE).

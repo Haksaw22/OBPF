@@ -2,12 +2,12 @@
 
 Before anything from the OPBF project's own closure report was repeated publicly, its
 load-bearing claims were re-verified with fresh eyes against the actual code and raw
-data, about eight weeks after the project closed. The reason for the ceremony: the
-project leaned heavily on AI agents to execute, and a self-report from that kind of
-run can inherit the run's own blind spots — unfair baselines, premature closure,
-miscalibrated hyperparameters. So nothing public is cited on the project's word
-alone; every load-bearing number below was either reproduced from the committed code
-or corrected.
+data, about eight weeks after the project closed. The reason for the ceremony: a
+closure report written at the end of a long run inherits that run's blind spots —
+unfair baselines, premature closure, miscalibrated hyperparameters — so I re-verified
+every headline number independently before publishing any of it. Nothing public is
+cited on the project's word alone; every load-bearing number below was either
+reproduced from the committed code or corrected.
 
 **Verdict: REVISED — the close stands and is strengthened; specific claims corrected.**
 
@@ -46,8 +46,9 @@ reproduced the saved JSON bit-for-bit; the doc's key robustness claim — that a
 The headline p-value (4.8e-5) was recomputed directly from the raw per-seed arrays.
 
 One naming note for honesty: no successor-measure machinery is involved (in a one-step
-bandit, SF correctly degenerates to reward-feature regression); the blog calls it a
-"generic frozen encoder". One pre-registration deviation found: the committed gate uses
+bandit, SF correctly degenerates to reward-feature regression); the autopsy's scoreboard
+([legacy/OPBF-autopsy.md](legacy/OPBF-autopsy.md)) lists it as "generic encoder, equal
+size". One pre-registration deviation found: the committed gate uses
 the *mean* where the plan said *median* for the vs-scratch criterion (with the median it
 would have passed that sub-criterion); this affects only the vs-scratch nuance — which
 the project's own doc already reported honestly in prose — not the decisive vs-encoder
@@ -87,7 +88,9 @@ untried and cheap, actually run ([probe script](revalidation/probe_missed_exits.
   project's own twice-named "only place differentiable grouping could win") — **never
   built or tested; closed by argument, not experiment.** This is the one genuinely open
   exit. Days of bespoke-environment work, real rigging risk, tempered promise given the
-  oracle ceilings above. Named in the blog as not-done.
+  oracle ceilings above. The deprecated autopsy
+  ([legacy/OPBF-autopsy.md](legacy/OPBF-autopsy.md)) does not cover it; this entry is
+  the public record that it was never run.
 
 ### 4. The (b) conflict-auditing arc — does the three-round story reproduce? (Yes, to 3–4 decimals)
 
@@ -103,7 +106,8 @@ dissolution (PCGrad+momentum 0.0417 vs tpcgrad 0.0565, matching the reported
 - **Match:** E7 (0.841/0.980 in the saved JSON), E6 (0.888/0.997; p recomputed from raw
   arrays = 4.77e-5), E9 (0.465/0.711 vs random 0.359/0.444), E10 (fast-drift β=0 −10.90
   beats β=0.9 −10.14; GradVac tie p=0.23). Seed counts all match claimed.
-- **Mismatch (corrected in the blog):** the closure report and theory doc cite the E1
+- **Mismatch (corrected in [legacy/OPBF-autopsy.md](legacy/OPBF-autopsy.md)):** the
+  closure report and theory doc cite the E1
   smoke reconstruction error as "NMAE ≈ 0.003"; the only raw file says **0.162**, and a
   live re-run of the exact config reproduces ~0.159. The AMI ≈ 0 half of the claim
   holds. The "0.003" figure appears in no raw data and is not cited here.

@@ -1,7 +1,8 @@
 # OBPF verdict — FINAL: the operational objective cannot see the structure (2026-07-22)
 
-*Pre-registered gates: DESIGN.md (signed 2026-07-22, commit 000a696; R1 repair
-round authorized same day, pre-committed to one round). Total compute: ~3 CPU-hours,
+*Pre-registered gates: DESIGN.md (signed 2026-07-22, the first commit in this
+history; R1 repair round pre-authorized same day, pre-committed to one round). Total
+compute: ~3 CPU-hours,
 within caps. C1/C3/C2 never ran — gate zero killed, the repair round failed at its
 own calibration, and the pre-commitment stops there.*
 
@@ -52,13 +53,13 @@ scale, under both pre-registered merge operators.
 
 - Toy scale (12-task synthetic MTL, ~2k-param model), K=100, one λ_d. The artifact/
   signal ratio could differ at other scales; nothing here says it improves.
-- The Z2 kill is gate-approved as *written* and *as intended* (the diagnosis confirms
+- The Z2 kill stands per the gate as *written* and *as intended* (the diagnosis confirms
   objective preference, not optimizer noise, as the dominant cause).
 - A side observation with independent value for the model-merging/BTM literature:
   end-to-end optimising a partition-train-merge pipeline at this scale recovers
   merge-friendliness, not semantic structure.
 
-## The repair round (option 2, authorized 2026-07-22; R1 in DESIGN)
+## The repair round (R1, pre-authorized in DESIGN)
 
 The diagnosed artifact had a specific cure: damped update-sum with a per-evaluation
 line search over the merge step (every partition gets its best damping), plus a full

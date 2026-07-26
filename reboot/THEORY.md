@@ -1,9 +1,9 @@
 # OBPF reboot — theory draft v0
 
-*Status: **Approved 2026-07-22** — three-readings fork resolved as proposed
+*Status: **Frozen 2026-07-22** — three-readings fork resolved as proposed
 ((C) merge-fidelity operational, (A) compatible-demands theory, (B) parameter-partition
-baseline); degeneracy handling approved. Experiment design lives in DESIGN.md
-(separate sign-off gates any compute). Predecessor (OPBF: affinity-proxy factorisation
+baseline); degeneracy handling settled. Experiment design lives in DESIGN.md
+(signed separately; no compute before it was signed). Predecessor (OPBF: affinity-proxy factorisation
 of given loss terms) is closed and its negative stands; this is a different mechanism.*
 
 ## 0. The formulation (2026-07-22)
